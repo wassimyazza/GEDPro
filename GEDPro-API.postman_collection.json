@@ -1,0 +1,999 @@
+{
+    "info": {
+        "name": "GEDPro API",
+        "description": "Complete API collection for GEDPro - Document Management and Recruitment System",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "version": "1.0.0"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{access_token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:3000",
+            "type": "string"
+        },
+        {
+            "key": "access_token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "org_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "form_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "candidate_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "public_id",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Health",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/health",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "health"
+                            ]
+                        },
+                        "description": "Check API health status"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Register User",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201 || pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set(\"access_token\", jsonData.access_token);",
+                                    "    console.log(\"Token saved: \" + jsonData.access_token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"P@ssw0rd!\",\n  \"role\": \"adminRH\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/auth/register",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "description": "Register a new user. Token is automatically saved to collection variables."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set(\"access_token\", jsonData.access_token);",
+                                    "    console.log(\"Token saved: \" + jsonData.access_token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"P@ssw0rd!\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/auth/login",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Login with email and password. Token is automatically saved to collection variables."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Current User",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/auth/me",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "auth",
+                                "me"
+                            ]
+                        },
+                        "description": "Get current authenticated user info"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Organizations",
+            "item": [
+                {
+                    "name": "Create Organization",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201 || pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set(\"org_id\", jsonData.id);",
+                                    "    console.log(\"Organization ID saved: \" + jsonData.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Acme Corporation\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/organizations",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "organizations"
+                            ]
+                        },
+                        "description": "Create a new organization (ADMIN_RH only). Organization ID is automatically saved."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List Organizations",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/organizations",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "organizations"
+                            ]
+                        },
+                        "description": "Get all organizations"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Create User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"rh@example.com\",\n  \"password\": \"P@ssw0rd!\",\n  \"role\": \"rh\",\n  \"orgId\": \"{{org_id}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/users",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "users"
+                            ]
+                        },
+                        "description": "Create a new user (ADMIN_RH only). Roles: admin_rh, rh, manager"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Forms",
+            "item": [
+                {
+                    "name": "Create Form",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201 || pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set(\"form_id\", jsonData.id);",
+                                    "    console.log(\"Form ID saved: \" + jsonData.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Candidature Développeur Backend\",\n  \"description\": \"Formulaire pour les développeurs backend\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/forms",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms"
+                            ]
+                        },
+                        "description": "Create a new form (RH/ADMIN_RH). Form ID is automatically saved."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List Forms",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/forms",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms"
+                            ]
+                        },
+                        "description": "Get all forms for the organization"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Form",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}"
+                            ]
+                        },
+                        "description": "Get a specific form by ID"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Form",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Updated Form Title\",\n  \"description\": \"Updated description\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}"
+                            ]
+                        },
+                        "description": "Update form details"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Publish Form",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.publicId) {",
+                                    "        pm.collectionVariables.set(\"public_id\", jsonData.publicId);",
+                                    "        console.log(\"Public ID saved: \" + jsonData.publicId);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}/publish",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}",
+                                "publish"
+                            ]
+                        },
+                        "description": "Publish form and generate public ID. Public ID is automatically saved."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Form",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}"
+                            ]
+                        },
+                        "description": "Delete a form"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Form Fields",
+            "item": [
+                {
+                    "name": "List Form Fields",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}/fields",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}",
+                                "fields"
+                            ]
+                        },
+                        "description": "Get all fields for a form"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Form Field",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"type\": \"text\",\n  \"label\": \"Nom complet\",\n  \"required\": true,\n  \"order\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}/fields",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}",
+                                "fields"
+                            ]
+                        },
+                        "description": "Add a field to a form. Field types: text, email, number, textarea, select, checkbox, radio, file, date"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Form Field",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"label\": \"Full Name\",\n  \"required\": false\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}/fields/:fieldId",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}",
+                                "fields",
+                                ":fieldId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "fieldId",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "description": "Update a specific field"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Form Field",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}/fields/:fieldId",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}",
+                                "fields",
+                                ":fieldId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "fieldId",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "description": "Delete a field from a form"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Reorder Fields",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"items\": [\n    {\"id\": \"field-id-1\", \"order\": 1},\n    {\"id\": \"field-id-2\", \"order\": 2}\n  ]\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/forms/{{form_id}}/fields/reorder",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "forms",
+                                "{{form_id}}",
+                                "fields",
+                                "reorder"
+                            ]
+                        },
+                        "description": "Reorder form fields"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Public Forms (No Auth)",
+            "item": [
+                {
+                    "name": "Get Published Form",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/public/forms/{{public_id}}",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "public",
+                                "forms",
+                                "{{public_id}}"
+                            ]
+                        },
+                        "description": "Get a published form by public ID (no authentication required)"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Candidates (Public)",
+            "item": [
+                {
+                    "name": "Submit Candidate Application",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201 || pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set(\"candidate_id\", jsonData.id);",
+                                    "    console.log(\"Candidate ID saved: \" + jsonData.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"data\": {\n    \"field-id-1\": \"John Doe\",\n    \"field-id-2\": \"john@example.com\",\n    \"field-id-3\": \"5 years experience\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/public/forms/{{public_id}}/submissions",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "public",
+                                "forms",
+                                "{{public_id}}",
+                                "submissions"
+                            ]
+                        },
+                        "description": "Submit a candidate application (no authentication required). Candidate ID is automatically saved."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Candidates",
+            "item": [
+                {
+                    "name": "Update Candidate Status",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"status\": \"PRESELECTIONNE\"\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/candidates/{{candidate_id}}/status",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "candidates",
+                                "{{candidate_id}}",
+                                "status"
+                            ]
+                        },
+                        "description": "Update candidate status. Available statuses: NOUVEAU, PRESELECTIONNE, ACCEPTE, REJETE"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Candidate Status History",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/candidates/{{candidate_id}}/history",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "candidates",
+                                "{{candidate_id}}",
+                                "history"
+                            ]
+                        },
+                        "description": "Get status change history for a candidate"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Documents",
+            "item": [
+                {
+                    "name": "Upload Document",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "file",
+                                    "type": "file",
+                                    "src": []
+                                },
+                                {
+                                    "key": "candidateId",
+                                    "value": "{{candidate_id}}",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/documents/upload",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "documents",
+                                "upload"
+                            ]
+                        },
+                        "description": "Upload a document for a candidate (RH/ADMIN_RH only)"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Download Document",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/documents/:documentId/download",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "documents",
+                                ":documentId",
+                                "download"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "documentId",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "description": "Download a document by ID"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Interviews",
+            "item": [
+                {
+                    "name": "Create Interview",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"candidateId\": \"{{candidate_id}}\",\n  \"scheduledAt\": \"2026-01-10T14:00:00Z\",\n  \"participants\": [\"rh@example.com\", \"manager@example.com\"]\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/interviews",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "interviews"
+                            ]
+                        },
+                        "description": "Schedule an interview for a candidate"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List Interviews",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/interviews?date_from=2026-01-01&date_to=2026-01-31",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "interviews"
+                            ],
+                            "query": [
+                                {
+                                    "key": "date_from",
+                                    "value": "2026-01-01"
+                                },
+                                {
+                                    "key": "date_to",
+                                    "value": "2026-01-31"
+                                }
+                            ]
+                        },
+                        "description": "List interviews with optional date filters"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Interview",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"scheduledAt\": \"2026-01-11T15:00:00Z\",\n  \"participants\": [\"rh@example.com\", \"cto@example.com\"]\n}"
+                        },
+                        "url": {
+                            "raw": "http://localhost:3000/interviews/:interviewId",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "interviews",
+                                ":interviewId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "interviewId",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "description": "Update interview details"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Cancel Interview",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/interviews/:interviewId/cancel",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "interviews",
+                                ":interviewId",
+                                "cancel"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "interviewId",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "description": "Cancel an interview"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Notifications",
+            "item": [
+                {
+                    "name": "List Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/notifications",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "notifications"
+                            ]
+                        },
+                        "description": "Get all notifications for current user"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List Unread Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/notifications?unread=true",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "notifications"
+                            ],
+                            "query": [
+                                {
+                                    "key": "unread",
+                                    "value": "true"
+                                }
+                            ]
+                        },
+                        "description": "Get only unread notifications"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Mark Notification as Read",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [],
+                        "url": {
+                            "raw": "http://localhost:3000/notifications/:notificationId/read",
+                            "host": [
+                                "http://localhost:3000"
+                            ],
+                            "path": [
+                                "notifications",
+                                ":notificationId",
+                                "read"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "notificationId",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "description": "Mark a notification as read"
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}
